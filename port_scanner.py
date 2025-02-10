@@ -9,16 +9,21 @@ import argparse
 def ping_host(ip):
     """Pings a host and returns the status and response time."""
     try:
+        # Determine OS-specific ping command. 
         if platform.system().lower() == "windows":
             cmd = ["ping", "-n", "1", "-w", "1000", ip]  
         else:
+            # Mac OS and Linux commands.
             cmd = ["ping", "-c", "1", "-W", "1", ip]  
         
+        # Run the ping command and capture the output.
         result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=2)
         
+        # Check if command was successful
         if result.returncode != 0:
             return "DOWN", "No response"
         
+        # Finds response time
         match = re.search(r"time[=<]([\d.]+) ?ms", result.stdout)
         if match:
             response_time = match.group(1) + "ms"
@@ -43,6 +48,7 @@ def scan_ports(ip, ports=[22, 80, 443]):
 def get_active_hosts(cidr, scan_ports_flag=False):
     """Scans the network and reports active hosts."""
     try:
+        # Allows for any IPv4 input with CIDR.
         network = ipaddress.IPv4Network(cidr, strict=False)
         print(f"\nScanning network {cidr}...\n")
         results = []
@@ -73,6 +79,7 @@ def get_active_hosts(cidr, scan_ports_flag=False):
     except ValueError as e:
         print(f"Invalid CIDR notation: {e}")
 
+# If the script is run directly, prompt the user for input.
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Network Scanner with Optional Port Scanning")
     parser.add_argument("cidr", help="CIDR notation (e.g., 192.168.1.0/24)")
