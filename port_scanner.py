@@ -35,14 +35,25 @@ def ping_host(ip):
     except Exception as e:
         return "ERROR", str(e)
 
-def scan_ports(ip, ports=[22, 80, 443]):
+def scan_ports(ip, ports=[21, 22, 25, 53, 80, 110, 123, 143, 179, 443, 500, 3389]): # Common ports
     """Scans specified ports on a given IP and returns open ports."""
     open_ports = []
+    # Creates a socket: IpV4, TCP
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1)
     for port in ports:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        # Tries to connect to the port.
+        try:
+            s.connect((ip, port))
+            open_ports.append(port)
+        # If the port is closed, it will throw an exception.
+        except (socket.timeout, socket.error):
+            pass
+        # Always close the socket.
+        finally:
+            s.close()
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(1)
-            if s.connect_ex((ip, port)) == 0:
-                open_ports.append(port)
     return open_ports
 
 def get_active_hosts(cidr, scan_ports_flag=False):
