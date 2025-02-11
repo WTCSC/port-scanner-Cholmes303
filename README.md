@@ -13,13 +13,13 @@ This Python script scans a given network for active hosts using ICMP ping reques
 - **Command-line interface**: Easy to use with simple arguments.
 
 ## Prerequisites
-Ensure you have Python 3 installed on your system. This script does not require additional libraries beyond the Python standard library.
+Ensure you have Python 3 installed on your system. This script does not require additional libraries beyond the standard Python library.
 
 ## Usage
 Run the script using the following command:
 
 ```bash
-python script.py <CIDR> [-p]
+python3 port_scanner.py <CIDR> [-p]
 ```
 
 ### Arguments:
@@ -29,12 +29,12 @@ python script.py <CIDR> [-p]
 ### Examples:
 #### Scan a network for active hosts:
 ```bash
-python script.py 192.168.1.0/24
+python3 port_scanner.py 192.168.1.0/24
 ```
 
 #### Scan a network for active hosts and check for open ports:
 ```bash
-python script.py 192.168.1.0/24 -p
+python3 port_scanner.py 192.168.1.0/24 -p
 ```
 
 ## Output Example
